@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>manageUser</title>
+    <meta charset="utf-8"/>
+    <head th:include="commonTemplate::head"></head>
+    <link rel="stylesheet" th:href="@{css/dashStyle.css}"/>
+</head>
+<body>
+
+<div th:include="commonTemplate::nav"></div>
+
+<section class="container-fluid back-color" style="margin-top:70px;padding-top: 15px">
+    <div class="col-md-9" style="padding-left: 0; ">
+        <div th:include="commonTemplate::recognizeNewer"></div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-primary" style="margin-right: 25px ">
+            <div class="panel-heading">
+                <img alt="star" src="/img/badges2.png"/>
+                <b>MY BADGES</b>
+            </div>
+            <div class="panel-body" th:object="${user}">
+                <input id="user-id" th:value="${user.getId()}" type="hidden"/>
+                <div class="col-md-3">
+                    <img alt='User Image' class='user-image' th:src="@{${user.getFileName()}}"/>
+                </div>
+                <div class="col-md-9">
+                    <div>
+                        <label style="padding-left: 10px" th:text="*{name}">Amarjeet Malik{ }</label>
+                    </div>
+                    <div>
+                        <div class="col-md-4">
+                            <img alt="Gold" src="/img/badgeOrange.png"/>
+                            <span style="padding-left: 5px" th:text="${gold}"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <img alt="silver" src="/img/badgeGrey.png"/>
+                            <span style="padding-left: 5px" th:text="${silver}"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <img alt="bronze" src="/img/badgeBrown.png"/>
+                            <span style="padding-left: 5px" th:text="${bronze}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container-fluid back-color">
+    <div>
+        <div class="col-md-2">
+            <div class="form-group has-feedback has-search main">
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                <input class="form-control" id="searchNewer4" placeholder="Search" style="padding-left: 50px"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-6">
+                <select>
+                    <option disabled="disabled" selected="selected">Select Role</option>
+                    <option value="1">Admin</option>
+                    <option th:each="r : ${T(com.ttn.reap.enums.Role).values()}"
+                            th:text="${r.getValue()}" th:value="${r.getValue()}"></option>
+                </select>
+            </div>
+            <div class="col-md-6" style="padding-left: -50px">
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" id="activeUsers" type="checkbox"/>
+                    <label class="custom-control-label" for="activeUsers">Active Users</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7"></div>
+    </div>
+    <div class="container-fluid">
+        <table class="table table-bordered table-hover" id="table1"
+               style="background-color: #FFFFFF;text-align: center">
+            <tr style="text-align: center   ">
+                <th>Name</th>
+                <th>Role</th>
+                <th>Admin</th>
+                <th>Active</th>
+                <th>Email</th>
+                <th>Available Points</th>
+                <th>Points Used</th>
+                <th>
+                    <div>Badge Count</div>
+                    <div>
+                        <div>
+                            <div class="col-md-4">
+                                <img alt="Gold" src="/img/badgeOrange.png"/>
+                            </div>
+                            <div class="col-md-4">
+                                <img alt="silver" src="/img/badgeGrey.png"/>
+                            </div>
+                            <div class="col-md-4">
+                                <img alt="bronze" src="/img/badgeBrown.png"/>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            <tr th:each="badgeBal : ${badgeBalances}" th:id="${badgeBal.getUserId().getId()}">
+                <td th:text="*{badgeBal.getUserId().getName()}"></td>
+                <td>
+                    <select class="table-dropdown-role">
+                        <option disabled="disabled">Select Role</option>
+                        <option th:each="r : ${T(com.ttn.reap.enums.Role).values()}"
+                                th:selected="${r.getValue() == badgeBal.getUserId().getRole().getValue()}"
+                                th:text="${r.getValue()}" th:value="${r.getValue()}"></option>
+                    </select>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input isAdmin-checkbox"
+                               th:checked="*{badgeBal.getUserId().isAdmin()}"
+                               type="checkbox"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input isActive-checkbox"
+                               th:checked="*{badgeBal.getUserId().isActive()}"
+                               type="checkbox"/>
+                    </div>
+                </td>
+                <td th:text="*{badgeBal.getUserId().getEmail()}"></td>
+                <td>
+                    <input class="input-availPoints" style="width: 50px"
+                           th:value="*{badgeBal.getUserId().getAvailPoints()}" type="text"/>
+                </td>
+                <td th:text="*{badgeBal.getUserId().getRedeemedPoints()}"></td>
+                <td>
+                    <input class="input-goldCount" id="goldCount" name="goldCount" style="width: 50px"
+                           th:value="*{badgeBal.getGoldCount()}"
+                           type="text"/>
+                    <input class="input-silverCount" style="width: 50px" th:value="*{badgeBal.getSilverCount()}"
+                           type="text"/>
+                    <input class="input-bronzeCount" style="width: 50px" th:value="*{badgeBal.getBronzeCount()}"
+                           type="text"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+<input id="ugoldcount" type="hidden"/>
+<input id="usilvercount" type="hidden"/>
+<input id="ubronzecount" type="hidden"/>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="/js/dashboardStyle.js"></script>
+<script src="/js/ajax_js.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    document.getElementById('hidden_send_email').value = /*[[${user.getEmail()}]]*/ 'default';
+    document.getElementById('ugoldcount').value = /*[[${badge.getGoldCount()}]]*/ 'default';
+    document.getElementById('usilvercount').value = /*[[${badge.getSilverCount()}]]*/ 'default';
+    document.getElementById('ubronzecount').value = /*[[${badge.getBronzeCount()}]]*/ 'default';
+    /*]]>*/
+</script>
+</body>
+</html>

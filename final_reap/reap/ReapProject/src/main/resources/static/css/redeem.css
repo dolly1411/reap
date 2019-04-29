@@ -1,0 +1,67 @@
+.fontstyle{
+    font-weight: bolder;
+    /*margin-left: 15px;*/
+}
+.itemimg{
+    height: 45px;
+    width: 45px;
+    padding: 5px;
+}
+
+.points{
+    text-align: right;
+}
+.pointstyle{
+    color: red;
+    padding-right: 35px;
+}
+.redeem{
+    float: right;
+    margin-right: 25px;
+    background-color: #34a6a2;
+    margin-top: 15px;
+    margin-bottom: 50px;
+}
+.redeem:hover{
+    color: white;
+}
+.close {
+    cursor: pointer;
+    top: 80%;
+    right: 0%;
+    padding: 12px 16px;
+    transform: translate(0%, -50%);
+}
+.close:hover {color: black;}
+.items{
+    background-color: white;
+    margin: 0 2px;
+}
+.imgitems{
+    height:100px;
+    /*width: 100px;*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+.item{
+    float: left;
+    border: #E8E8E8	 1px double;
+}
+.point{
+    background-color: #34a6a2;
+    text-align: center;
+    margin-left: 85px;
+    border: white;
+    padding: 5px;
+}
+.point:hover{
+    color: white;
+}
+.itemname{
+    text-align: center;
+}
+.totalpoints{
+    display: none;
+}

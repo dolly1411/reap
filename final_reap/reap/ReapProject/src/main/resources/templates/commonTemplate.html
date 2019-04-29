@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>common</title>
+</head>
+<body>
+<div th:fragment="nav">
+    <nav class="navbar navbar-default navbar-fixed-top navbar-expand-md main-header">
+        <div class="container-fluid">
+            <div class="navbar-header col-md-5">
+                <a class="navbar-brand col-md-3" href="/"><img alt="logo" src="/img/reap.png" style="width: 125px"/></a>
+                <img alt="reap" class="col-md-9" src="/img/RewardEAP.png"
+                     style="margin-top: 10px;margin-left: 10px; height: 40px"/>
+            </div>
+            <ul class="nav navbar-nav col-md-7">
+                <li class="col-md-3">
+                    <a href="http://newersworld.tothenew.com" id="nav-list-first">
+                        Back to Newers World
+                    </a></li>
+                <li class="col-md-2 nav-list-pad">
+                    <form method="get" th:action="@{/user}">
+                        <button class="dashboard" type="submit">
+                            <img alt="dashboard" id="dashboard-image" src="/img/dashboard2.png"/>
+                            Dashboard
+                        </button>
+                    </form>
+                </li>
+                <li class="col-md-2 nav-list-pad">
+                    <form method="post" th:action="@{/badges}" th:object="${user}">
+                        <button id="nav-list-third" type="submit">
+                            <img alt="badges" id="badges" src="/img/badges1.png"/>
+                            Badges
+                        </button>
+                    </form>
+                </li>
+                <li class="col-md-2 nav-list-pad">
+                    <a id="nav-list-fourth">
+                        <img alt="certificate" id="certificate" src="/img/certificate1.png"
+                             style="width: 21px;height: 23px;margin-left: -2%"/>
+                        Certificate
+                    </a>
+                </li>
+                <li class="col-md-1 nav-list-pad">
+                    <img alt="notification-bell" id="nav-list-fifth" src="/img/notification-bell.png"/>
+                </li>
+                <li class="col-md-2 nav-list-pad">
+                    <img alt='User Image' class='user-image' data-target="#myModal" data-toggle="modal"
+                         th:src="@{${user.getFileName()}}"/>
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content" th:object="${user}">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Your Profile</h4>
+                                </div>
+                                <div class="modal-body" style="height: 100px">
+                                    <div class="col-md-3">
+                                        <img alt='User Image' class='user-image3'
+                                             th:src="@{${user.getFileName()}}"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Newer Name:</label>
+                                        <label>Email id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label th:text="*{name}" style="margin-left: -20px"></label>
+                                        <br/>
+                                        <label th:text="*{email}" style="margin-left: -20px"></label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="background-color: #f4f4f4">
+                                    <form class="col-md-6" id="manageForm" method="get" th:action="@{/manage}">
+                                        <button id="manage-button" th:if="${role}" type="submit">
+                                            Manage
+                                        </button>
+                                    </form>
+                                    <a class="col-md-6" href="/logout" style="text-align: center;text-decoration: none">
+                                        <img alt="logout" src="/img/logout.png"/>
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+</div>
+
+<div th:fragment="recognizeNewer">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <img alt="star" src="/img/badges2.png"/>
+            <b>RECOGNIZE NEWER</b>
+        </div>
+        <div class="panel-body">
+            <form id="recognise_form" method="post" th:action="@{/recognize}" th:object="${recognizeco}">
+                <div class="form-group">
+                    <img alt="person" src="/img/newer.png"/>
+                    <input id="hidden_send_email" th:field="*{sender_email}" type="hidden"/>
+                    <input id="searchNewer" placeholder="Select a newer" th:field="*{receiver_email}" type="text"/>
+                    <select th:field="*{badge_val}" id="userBadgeSelect">
+                        <div th:object="${badge}">
+                            <option hidden="hidden">Select a Badge</option>
+                            <option value="gold">Gold(<span th:text="*{goldCount}"></span>)</option>
+                            <option value="silver">Silver(<span th:text="*{silverCount}"></span>)</option>
+                            <option value="bronze">Bronze(<span th:text="*{bronzeCount}"></span>)</option>
+                        </div>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><b>Reasons:</b></label>
+                    <textarea class="form-control" placeholder="Give recognition reason/message..."
+                              style="height: 100px" th:field="*{message_val}"></textarea>
+                </div>
+                <button class="btn btn-default pull-right" id="recognize_btn" type="submit">Recognize</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="head">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet"/>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <!--<link href="css/bootstrap.min.css" rel="stylesheet"/>-->
+    <!--<script src="js/jquery.min.js"></script>-->
+    <!--<script src="js/bootstrap.min.js"></script>-->
+    <link href="/img/ttn.ico" rel="icon" sizes="20x20" type="image/gif"/>
+    <link rel="stylesheet" th:href="@{css/dashStyle.css}"/>
+</div>
+</body>
+</html>

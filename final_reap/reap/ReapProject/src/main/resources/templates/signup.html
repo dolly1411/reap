@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/signup.css}"/>
+    <link href="../img/ttn.ico" rel="icon" sizes="20x20" type="image/gif"/>
+
+</head>
+<body id="backimage">
+<div id="background">
+    <div id="container-fluid">
+        <div class="top">
+            <ul class="nav nav-tabs" id="nav">
+                <li><a href="login">Login</a></li>
+                <li class="active"><a href="signup">Sign Up</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="bottom">
+        <form enctype="multipart/form-data" method="post" th:action="@{/register}" th:object="${user}">
+            <div id="reap_login">
+                <label class="error" th:text="${err}"></label>
+                <div class="form-element">
+                    <label>Firstname:<sup>*</sup></label>
+                    <input name="Firstname" required="required" th:field="*{firstName}" type="text"/>
+                </div>
+                <div class="form-element">
+                    <label>Lastname:<sup>*</sup></label>
+                    <input name="Lastname" required="required" th:field="*{lastName}" type="text"/>
+                </div>
+                <div class="form-element">
+                    <label style="float:left;">Photo: <sup>*</sup></label>
+                    <input name="file" required="required" style=" border: thin;" type="file"/>
+                </div>
+                <div class="form-element">
+                    <label>Email: <sup>*</sup></label>
+                    <input name="Email" required="required" th:field="*{email}" type="text"/>
+                </div>
+                <div class="form-element">
+                    <label>Password: <sup>*</sup></label>
+                    <input name="Password" required="required" th:field="*{password}" type="password"/>
+                </div>
+                <div>
+                    <hr id="back"/>
+                </div>
+                <div class="sub">
+                    <button class="btn btn-primary" name="submit" type="submit">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

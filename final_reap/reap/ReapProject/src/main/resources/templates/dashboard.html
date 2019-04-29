@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <head th:include="commonTemplate::head"></head>
+    <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+<div th:include="commonTemplate::nav"></div>
+
+<section class="container-fluid back-color" style="margin-top:70px;padding-top: 15px">
+    <div class="col-md-9" style="padding-left: 0">
+        <div th:include="commonTemplate::recognizeNewer"></div>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="height: 50px">
+                <div class="col-md-5">
+                    <img alt="wall-notify" th:src="@{img/wall_of-fame.png}"/>
+                    <span style="margin-left: 10px">
+                    <b>WALL OF FAME</b>
+                    </span>
+                </div>
+                <div class="form-group has-feedback has-search main col-md-7">
+                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                    <input class="form-control" placeholder="Search" type="text"/>
+                </div>
+                <img alt="calender" class="pull-right user-image2" id="calendarrange" name="dates" src="/img/cal.png"
+                     style="margin-left: 10px"/>
+                <a href="/downloadCSV" target="_blank"><img alt="csv-download" class="pull-right user-image2"
+                                                            id="downloadcsvrange" src="/img/download.png"
+                                                            th:if="${role}"/></a>
+            </div>
+            <div class="panel-body" th:each="tranlist:${badgetransactionlist}">
+                <div class="col-md-2">
+                    <img alt='User Image' class='user-image'
+                         th:src="@{${tranlist.getReceiver().getFileName()}}"/>
+                </div>
+                <div class="col-md-9">
+                    <strong><span th:text="${tranlist.getReceiver().getName()}"></span></strong>
+                    has recieved
+                    <span th:with="var=${tranlist.getBadge()}">
+                        <span th:if="${var == T(com.ttn.reap.enums.Badge).GOLD}"><img
+                                src="/img/badgeOrange.png"/></span>
+                        <span th:if="${var == T(com.ttn.reap.enums.Badge).SILVER}"><img
+                                src="/img/badgeGrey.png"/></span>
+                        <span th:if="${var == T(com.ttn.reap.enums.Badge).BRONZE}"><img
+                                src="/img/badgeBrown.png"/></span>
+                    </span>
+                    from
+                    <strong><span th:text="${tranlist.getSender().getName()}"></span></strong> for Reason:
+                    <span th:text="${tranlist.getReason()}"></span>
+                </div>
+                <div class="col-md-1">
+                    <img class="txnRow" data-target="#revokeModal" data-toggle="modal" src="/img/delete.png"
+                         th:id="${tranlist.getId()}" th:if="${role}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-primary" style="position: fixed; margin-right: 25px">
+            <div class="panel-heading">
+                <img alt="star" src="/img/badges2.png"/>
+                <b>MY BADGES</b>
+            </div>
+            <div class="panel-body" th:object="${user}">
+                <input id="user-id" th:value="${user.getId()}" type="hidden"/>
+                <div class="col-md-3">
+                    <img alt='User Image' class='user-image' th:src="@{${user.getFileName()}}"/>
+                </div>
+                <div class="col-md-9">
+                    <div>
+                        <label style="padding-left: 10px" th:text="*{name}"></label>
+                    </div>
+                    <div>
+                        <div class="col-md-4">
+                            <img alt="Gold" src="/img/badgeOrange.png"/>
+                            <span style="padding-left: 5px" th:text="${gold}"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <img alt="silver" src="/img/badgeGrey.png"/>
+                            <span style="padding-left: 5px" th:text="${silver}"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <img alt="bronze" src="/img/badgeBrown.png"/>
+                            <span style="padding-left: 5px" th:text="${bronze}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-primary" style="margin-top: 170px;position: fixed;margin-right: 25px">
+            <div class="panel-heading">
+                <b>NEWER'S BOARD</b>
+            </div>
+
+            <div class="panel-body" th:each="bad,count : ${newer}">
+                <div class="col-md-3">
+                    <img alt='User Image' class='user-image' th:src="${bad.getReceiver().getFileName()}"/>
+                </div>
+                <div class="col-md-9">
+                    <div>
+                        <strong><label style="padding-left: 10px" th:text="*{bad.getReceiver().getName()}"></label></strong>
+                    </div>
+                    <div>
+                        <div class="col-md-4">
+                            <img alt="Gold" src="/img/badgeOrange.png"/>
+                            <span style="padding-left: 5px" th:text="${goldlist.get(count.index)}"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <img alt="silver" src="/img/badgeGrey.png"/>
+                            <span style="padding-left: 5px" th:text="${silverlist.get(count.index)}"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <img alt="bronze" src="/img/badgeBrown.png"/>
+                            <span style="padding-left: 5px" th:text="${bronzelist.get(count.index)}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="pull-right">View all</a>
+        </div>
+    </div>
+</section>
+
+<!-- Admin Revoke Modal -->
+<div class="modal fade" id="revokeModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type="button">&times;</button>
+                <h4 class="modal-title">Revoke Recognition</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/revokeTxn" method="post">
+                    <div class="form-group">
+                        <div class="radio">
+                            <label><input name="optradio" type="radio" value="1"/>Selected Incorrect Name</label>
+                        </div>
+                        <div class="radio">
+                            <label><input name="optradio" type="radio" value="2"/>Selected Incorrect Badge</label>
+                        </div>
+                        <div class="radio">
+                            <label><input name="optradio" type="radio" value="3"/>Inapppropriate Language Used</label>
+                        </div>
+                        <div class="radio">
+                            <label><input name="optradio" type="radio" value="4"/>
+                                <input class="form-control" id="others" name="others" placeholder="Others, Please Specify"
+                                       type="text"/>
+                            </label>
+                        </div>
+                    </div>
+                    <input id="txnRowModal" name="txnId" type="hidden"/>
+                    <button class="btn btn-default" type="submit">Revoke</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input id="ugoldcount" type="hidden"/>
+<input id="usilvercount" type="hidden"/>
+<input id="ubronzecount" type="hidden"/>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
+<link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css"/>
+<script src="/js/dashboardStyle.js"></script>
+<script src="/js/date_picker.js"></script>
+<script src="/js/ajax_js.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    document.getElementById('hidden_send_email').value = /*[[${user.getEmail()}]]*/ 'default';
+    document.getElementById('ugoldcount').value = /*[[${badge.getGoldCount()}]]*/ 'default';
+    document.getElementById('usilvercount').value = /*[[${badge.getSilverCount()}]]*/ 'default';
+    document.getElementById('ubronzecount').value = /*[[${badge.getBronzeCount()}]]*/ 'default';
+    /*]]>*/
+</script>
+<script>
+    $(".txnRow").click(function () {
+        document.getElementById("txnRowModal").value = this.id;
+    });
+</script>
+</body>
+</html>

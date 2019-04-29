@@ -1,0 +1,46 @@
+#background{
+    height: 250px;
+    background-color: ghostwhite;
+    margin: 0 auto;
+    width: 600px;
+}
+.bottom{
+    margin-top: 15px;
+}
+
+#base{
+    width: 600px;
+    height: 800px;
+    margin: 0 auto;
+}
+sup
+{
+    color: red;
+}
+.form-element
+{
+    padding-bottom:15px;
+    margin-left: 25px;
+}
+#nav{
+    margin: 20px;
+    padding-top: 10px;
+}
+#base
+{
+    background-image: url("/img/ttnBackground.jpg");
+}
+.sub{
+    float:right;
+    margin-right: 15px;
+    margin-bottom: 25px;
+}
+.error{
+    color: red;
+    font-size: 12px;
+    margin-left: 25px;
+}
+.loginform{
+    height: 80px;
+    background-color: ghostwhite;
+}

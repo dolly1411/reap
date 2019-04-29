@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <link href="../img/ttn.ico" rel="icon" sizes="20x20" type="image/gif"/>
+
+</head>
+<body id="base">
+<div id="background">
+    <div id="container-fluid">
+        <div class="top">
+            <ul class="nav nav-tabs" id="nav">
+                <li class="active"><a href="login">Login</a></li>
+                <li><a href="signup">Sign Up</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="bottom">
+        <form method="post" th:action="@{/user}" th:object="${user}" class="formuser">
+            <label class="error" th:text="${valid}"></label>
+            <div class="form-element">
+                <label>Username:<sup>*</sup></label>
+                <input name="title" placeholder="Enter your Email" required="required" th:field="*{email}" type="text"/>
+            </div>
+            <div class="form-element">
+                <label>Password:<sup>*</sup></label>
+                <input name="Password" placeholder="Enter your password" required="required" th:field="*{password}"
+                       type="password"/>
+            </div>
+            <hr style="color:grey;"/>
+            <div class="loginform">
+                <a class="btn btn-link" href="/forgotPassword">Forgot Password</a>
+                <div class="sub">
+                    <button class="btn btn-primary" name="submit" type="submit">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

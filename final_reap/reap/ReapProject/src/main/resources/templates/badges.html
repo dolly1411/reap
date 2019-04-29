@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Badges</title>
+    <head th:include="commonTemplate::head"></head>
+</head>
+
+<body class="wrap">
+
+<div th:include="commonTemplate::nav"></div>
+
+<div class="container-fluid nopadding wrap">
+    <div class="row nopadding lower">
+        <div class="col-sm-4">
+            <section class="row fit panel">
+                <div class="lefthead "><img class="newer headimg" src="../img/badgewhite.png"/>BADGES AND POINTS</div>
+                <div class="mybadges" style="overflow: hidden">
+                    <div class="col-sm-8 nopadding" style="float:left;" th:object="${user}">
+                        <div class="profile mybadgesimg"><img class="profileimg" th:src="@{${user.getFileName()}}"/>
+                        </div>
+                        <div class="mybadgesUsername" th:text="*{name}"></div>
+                        <div>
+                            <span class="star">
+                            <img src="../img/badgeOrange.png"/>
+                            <span class="points" style="padding-left: 5px" th:text="${gold}"></span>
+                            </span>
+                            <span class="star mybadgestar">
+                            <img src="../img/badgeGrey.png"/>
+                            <span class="points" style="padding-left: 5px" th:text="${silver}"></span>
+                            </span>
+                            <span class="star mybadgestar">
+                            <img src="../img/badgeBrown.png"/>
+                            <span class="points" style="padding-left: 5px" th:text="${bronze}"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 nopadding point_img"><img src="../img/points.png"/></div>
+                    <div class="bottom-left zero" th:text="${user.availPoints}"></div>
+                    <div class="bottom-left pts" style="left: 355px;font-size: medium">pts</div>
+                </div>
+            </section>
+            <form method="post" th:action="@{/redeem}" th:object="${user}">
+                <div class="view">
+                    <button class="redeem">Redeem Points</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-8">
+            <ul class="nav nav-tabs topnav" role="tablist">
+                <li class="active"><a data-toggle="tab" href="#all" role="tab">ALL<span>(</span><span
+                        th:text="${allcount}"></span><span>)</span></a></li>
+                <li><a data-toggle="tab" href="#shared" role="tab">BADGES SHARED<span>(</span><span
+                        th:text="${sendercount}"></span><span>)</span></a></li>
+                <li><a data-toggle="tab" href="#recieved" role="tab">BADGES RECIEVED<span>(</span><span
+                        th:text="${receivedcount}"></span><span>)</span></a></li>
+                <li><a data-toggle="tab" href="#redeemed" role="tab">POINTS REDEEMED</a></li>
+            </ul>
+
+            <div class="nodata tab-content">
+                <div class="tab-pane" id="shared">
+                    <div class="panel-body" th:each="tranlist:${badgetransactionlistsender}">
+                        <div class="col-md-2">
+                            <img alt='User Image' class='user-image'
+                                 th:src="@{${tranlist.getReceiver().getFileName()}}"/>
+                        </div>
+                        <div class="col-md-9">
+                            <strong><span th:text="${tranlist.getReceiver().getName()}"></span></strong>
+                            has recieved
+                            <span th:with="var=${tranlist.getBadge()}">
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).GOLD}"><img
+                                    src="/img/badgeOrange.png"/></span>
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).SILVER}"><img
+                                    src="/img/badgeGrey.png"/></span>
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).BRONZE}"><img src="/img/badgeBrown.png"/></span>
+                            </span>
+                            from
+                            <strong><span th:text="${tranlist.getSender().getName()}"></span></strong> for Reason:
+                            <span th:text="${tranlist.getReason()}"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="tab-pane" id="recieved">
+                    <div class="panel-body" th:each="tranlist:${badgetransactionlistreceiver}">
+                        <div class="col-md-2">
+                            <img alt='User Image' class='user-image'
+                                 th:src="@{${tranlist.getReceiver().getFileName()}}"/>
+                        </div>
+                        <div class="col-md-9">
+                            <strong><span th:text="${tranlist.getReceiver().getName()}"></span></strong>
+                            has recieved
+                            <span th:with="var=${tranlist.getBadge()}">
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).GOLD}"><img
+                                    src="/img/badgeOrange.png"/></span>
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).SILVER}"><img
+                                    src="/img/badgeGrey.png"/></span>
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).BRONZE}"><img src="/img/badgeBrown.png"/></span>
+                            </span>
+                            from
+                            <strong><span th:text="${tranlist.getSender().getName()}"></span></strong> for Reason:
+                            <span th:text="${tranlist.getReason()}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="redeemed">
+                    <!--                    Points redeemed = <span th:text="${user.getRedeemedPoints()}"></span>   pts-->
+                    <div class="panel-body" th:each="purchase:${purchasehistory}">
+                        <div class="col-md-2">
+                            <img alt='User Image' class='user-image'
+                                 th:src="@{${purchase.getItemId().getImageSource()}}"/>
+                        </div>
+                        <div class="col-md-10">
+                            <strong><span th:text="${purchase.getItemId().itemName}"></span></strong>
+                            was bought by
+                            <strong><span th:text="${purchase.getUserId().getName()}"></span></strong>
+                            of
+                            <span th:text="${purchase.getItemId().getItemValue()}"></span>
+                            points on
+                            <span th:text="${purchase.getPurchaseTimestamp()}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane active" id="all">
+                    <div class="panel-body" th:each="tranlist:${badgetransactionlistsenderorreceiver}">
+                        <div class="col-md-2">
+                            <img alt='User Image' class='user-image'
+                                 th:src="@{${tranlist.getReceiver().getFileName()}}"/>
+                        </div>
+                        <div class="col-md-9">
+                            <strong><span th:text="${tranlist.getReceiver().getName()}"></span></strong>
+                            has recieved
+                            <span th:with="var=${tranlist.getBadge()}">
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).GOLD}"><img
+                                    src="/img/badgeOrange.png"/></span>
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).SILVER}"><img
+                                    src="/img/badgeGrey.png"/></span>
+                            <span th:if="${var == T(com.ttn.reap.enums.Badge).BRONZE}"><img src="/img/badgeBrown.png"/></span>
+                            </span>
+                            from
+                            <strong><span th:text="${tranlist.getSender().getName()}"></span></strong> for Reason:
+                            <span th:text="${tranlist.getReason()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/dashboardStyle.js"></script>
+<script src="/js/badges.js"></script>
+</body>
+</html>

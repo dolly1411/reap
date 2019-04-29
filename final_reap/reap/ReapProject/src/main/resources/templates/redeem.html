@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Redeem</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link href="../img/ttn.ico" rel="icon" sizes="20x20" type="image/gif"/>
+    <link rel="stylesheet" th:href="@{css/dashStyle.css}"/>
+    <link rel="stylesheet" th:href="@{css/redeem.css}"/>
+    <script th:src="@{'/js/redeem.js'}"></script>
+
+</head>
+<body>
+
+<div th:include="commonTemplate::nav"></div>
+
+<div class="container-fluid nopadding wrap">
+
+    <div class="row nopadding lower">
+        <div class="col-sm-4">
+            <section class="row fit panel">
+                <div class="lefthead " style="background-color: #9093c5">
+                    <img class="newer headimg" src="../img/badgewhite.png"/>
+                    BADGES AND POINTS
+                </div>
+                <div class="mybadges" style="overflow: hidden">
+                    <div class="col-sm-8 nopadding" style="float:left;" th:object="${user}">
+                        <div class="profile mybadgesimg"><img class="profileimg" th:src="@{${user.getFileName()}}"/>
+                        </div>
+                        <div class="mybadgesUsername" th:text="*{name}"></div>
+                        <div th:object="${badge}">
+                            <span class="star">
+                            <img src="../img/badgeOrange.png"/>
+                            <span class="points" th:text="*{goldCount}"></span>
+                              </span>
+                            <span class="star mybadgestar">
+                            <img src="../img/badgeGrey.png"/>
+                            <span class="points" th:text="*{silverCount}"></span>
+                            </span>
+                            <span class="star mybadgestar">
+                            <img src="../img/badgeBrown.png"/>
+                            <span class="points" th:text="*{bronzeCount}"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 nopadding point_img"><img src="../img/points.png"/></div>
+                    <div class="bottom-left zero" id="userpointstotal" th:text="${user.availPoints}">0</div>
+                    <div class="bottom-left pts" style="left: 355px;font-size: medium">pts</div>
+                </div>
+            </section>
+            <section class="row fit panel">
+                <div class="lefthead " style="background-color: #9093c5"><img class="newer headimg"/><span
+                        class="glyphicon glyphicon-shopping-cart"></span> BAG
+                </div>
+                <div class="row ">
+                    <div class="col-sm-6 fontstyle">Item Details</div>
+                    <div class="col-sm-6 fontstyle">Subtotal</div>
+                </div>
+                <div class="populate">
+
+                </div>
+                <div class="row ">
+                    <div class="col-sm-6 fontstyle points">Total</div>
+                    <div class="col-sm-6 fontstyle points pointstyle"><span class="subtotal">0</span>Points</div>
+                </div>
+                <form method="get" th:action="@{/redeemPoints}" th:object="${user}">
+                    <button class="row redeem redeempointsbutton">REDEEM POINTS</button>
+                </form>
+            </section>
+        </div>
+
+        <div class="col-sm-8">
+            <div class="lefthead " style="background-color: #9093c5"><img class="newer headimg"/><span
+                    class="glyphicon glyphicon-shopping-cart"></span> REAP NOW
+            </div>
+            <div class=" row items">
+                <div class="col-sm-4 item" th:each="items:${redeem}">
+                    <div><img class="imgitems" th:src="@{${items.getImageSource()}}"/></div>
+                    <button class="row point sipperbutton" th:id="${items.getId()}"
+                            th:text="${items.getItemValue()+'POINTS'}">10
+                    </button>
+                    <div class="itemname" th:text="${items.getItemName()}">SIPPER</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="/js/dashboardStyle.js"></script>
+</body>
+</html>
